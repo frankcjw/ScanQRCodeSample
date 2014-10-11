@@ -19,9 +19,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-     AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+
     
-    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:nil];
+}
+
+-(void)readQRCode{
+    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    
+    NSError *error = nil;
+    AVCaptureDeviceInput *input = [AVCaptureDeviceInput deviceInputWithDevice:device error:&error];
+    
+    if (error) {
+        NSLog(@"no camera-%@", error.localizedDescription);
+        return;
+    }
+    
     AVCaptureMetadataOutput *output = [[AVCaptureMetadataOutput alloc] init];
     
     [output setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
@@ -38,7 +50,6 @@
     
     [session startRunning];
     self.session = session;
-    
 }
 
 - (void)didReceiveMemoryWarning {
